@@ -144,11 +144,34 @@ class primCena(Scene):
             FadeOut(textoFerram_3),
         )
 
+        # ----------------------4 cena - r3
         textoFerram_4 = Tex(
             r"4. Podemos criar e representar \\  funções em $\mathbb{R}^3$"
         )
         textoFerram_4.to_corner(UL)
+        ponto_4 = Dot(color=WHITE)
+        graficos_3 = VGroup(
+            ax_2, curva1_graf, curva1_label, ponto_3, lines_pt3, rotulos_ax_2
+        )
 
         self.play(FadeIn(textoFerram_4))
+        self.play(ReplacementTransform(graficos_3, ponto_4))
 
         self.wait(3)
+
+        # ---add 3d axes
+
+
+class segCena(ThreeDScene):
+    def construct(self):
+        ponto_4 = Dot(color=WHITE)
+        ax_3 = ThreeDAxes()
+
+        self.set_camera_orientation(phi=75 * DEGREES, theta=30 * DEGREES)
+        self.play(ReplacementTransform(ponto_4, ax_3))
+        self.begin_ambient_camera_rotation(rate=1)
+        self.wait()
+        self.stop_ambient_camera_rotation()
+        self.move_camera(phi=75 * DEGREES, theta=30 * DEGREES)
+
+        self.wait()
