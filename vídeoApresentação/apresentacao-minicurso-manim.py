@@ -1,6 +1,5 @@
-from scipy.integrate import solve_ivp
-
 from manim import *
+from scipy.integrate import solve_ivp
 
 
 class primCena(Scene):
@@ -90,7 +89,7 @@ class primCena(Scene):
         ponto_1 = Dot(ax.coords_to_point(2, 2), color=PURPLE)
         linhas_pt1 = ax.get_lines_to_point(ax.coords_to_point(2, 2))
         self.play(
-            Transform(textoFerram_1, textoFerram_3),
+            ReplacementTransform(textoFerram_1, textoFerram_3),
             # Transform(graficos_1, ponto_1),
             ReplacementTransform(circul_1, ponto_1),
             # FadeOut(graficos_1),
@@ -127,17 +126,29 @@ class primCena(Scene):
         graficos_2.generate_target()
         graficos_2.target.shift(LEFT * 2 + DOWN).scale(1.2)
 
-        self.play(
-            MoveToTarget(graficos_2),
-        )
+        self.play(MoveToTarget(graficos_2))
 
         self.wait()
 
         curva1_graf = ax_2.plot(lambda x: (x**2), color=MAROON, x_range=[0, 2.2])
-        curva1_label = ax_2.get_graph_label(
-            curva1_graf, "x^2", x_val=-5, direction=DOWN * 5
+        curva1_label = ax_2.get_graph_label(curva1_graf, "x^2")
+        curva1_label.move_to((LEFT * 1.5) + (UP * 1.5))
+        ponto_3 = Dot(ax_2.coords_to_point(2, 4), color=PURPLE, fill_opacity=1)
+        lines_pt3 = ax_2.get_lines_to_point(ax_2.coords_to_point(2, 4))
+
+        self.play(
+            Create(curva1_graf),
+            Create(curva1_label),
+            ReplacementTransform(ponto_2, ponto_3),
+            ReplacementTransform(lines_pt2, lines_pt3),
+            FadeOut(textoFerram_3),
         )
-        # self.add(curva1_graf, curva1_label)
-        self.play(Create(curva1_graf), Create(curva1_label))
+
+        textoFerram_4 = Tex(
+            r"4. Podemos criar e representar \\  funções em $\mathbb{R}^3$"
+        )
+        textoFerram_4.to_corner(UL)
+
+        self.play(FadeIn(textoFerram_4))
 
         self.wait(3)
