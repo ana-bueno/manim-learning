@@ -1,5 +1,6 @@
 from manim import *
-from scipy.integrate import solve_ivp
+from scipy import integrate
+from scipy.integrate import solve_ivp, tplquad
 
 
 class primCena(Scene):
@@ -208,35 +209,79 @@ class segCena(ThreeDScene):
         # self.set_camera_orientation(zoom=0.5)
         # self.play(ReplacementTransform(ponto_4, ax_3))
         self.move_camera(phi=75 * DEGREES, theta=30 *
-                         DEGREES, zoom=1, run_time=1.5)
+                         DEGREES, zoom=0.8, run_time=1.5)
         # self.begin_ambient_camera_rotation(rate=0.15)
 
         # ----------função em r3
         circul_3 = Circle(radius=3, color=GREEN_D)
         self.play(Write(circul_3))
 
-        circul_4 = Circle(color=GREEN_D)
+        circul_4 = Circle(color=GREEN_D, radius=3)
         ax_4 = ThreeDAxes(
             x_range=[-4, 4],
             y_range=[-4, 4],
             z_range=[0, 4],
             z_length=4,
         )
-        graficos_4 = VGroup(ax_4, circul_4)
-        # graficos_4.scale(0.8)
-
-        # graficos_4.generate_target()
-        graficos_4.move_to(0.2 * RIGHT).scale(0.9)
+        ax_4.set_z_index(3)
+        # 3cilindro_1 = Cylinder(color=GREEN_D, radius=1, height=2,  show_ends=True)        graficos_4 = VGroup(ax_4, circul_4)
+        # graficos_4 = VGroup(ax_4, circul_4)
+        # graficos_4.scale(0.9)
 
         self.play(
-            Transform(circul_3, circul_4),
-            Transform(ax_3, ax_4),
+            ReplacementTransform(circul_3, circul_4),
+            ReplacementTransform(ax_3, ax_4),
         )
+
+        altura_1 = 0
+        raio = 3
+        altura_anim = ValueTracker(altura_1)
+
+        def cilind(u, v):
+            angulo = TAU * u
+
+            x = raio * np.cos(angulo)
+            y = raio * np.sin(angulo)
+            z = altura_anim.get_value() * v
+
+            return np.array([x, y, z])
+
+        cilindro_2 = Surface(
+            cilind,
+            u_range=(0, 1),
+            v_range=(0, 1),
+            resolution=(32, 1),
+            checkerboard_colors=[GREEN_D, GREEN_D],
+            fill_opacity=0.5
+        )
+
+        cilindro_2.add_updater(
+            lambda m: m.become(
+                Surface(
+                    cilind,
+                    u_range=(0, 1),
+                    v_range=(0, 1),
+                    resolution=(32, 1),
+                    checkerboard_colors=[GREEN_D, GREEN_D],
+                    fill_opacity=0.5
+                )
+            )
+        )
+
+        # cilindro_2.set_fill_by_checkerboard(GREEN_D, GREEN_D, opacity=0.5)
+        # cilindro_2.scale(0.9)
+
+        self.play(Create(cilindro_2))
+
+        self.play(altura_anim.animate.set_value(2), run_time=1.5)
+
+        # cilindro_2.remove_updater(lambda m: m.become(cilindro_2))
+
+        self.wait(2)
+
         # self.play(MoveToTarget(graficos_4))
         # ----------set up de animação
         # self.begin_ambient_camera_rotation(rate=1)
         # self.wait()
         # self.stop_ambient_camera_rotation()
-        # self.move_camera(phi=75 * DEGREES, theta=30 * DEGREES)
-
-        self.wait(3)
+        # self.move_camera(phi=75 * DEGREES, theta=30 * DEGRE
