@@ -277,6 +277,8 @@ class segCena(ThreeDScene):
 
         # cilindro_2.remove_updater(lambda m: m.become(cilindro_2))
 
+        self.play(FadeOut(cilindro_2))
+
         self.wait(2)
 
         # self.play(MoveToTarget(graficos_4))
