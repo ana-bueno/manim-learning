@@ -33,7 +33,7 @@ class primCena(Scene):
             "(\\rho cos(\phi))^2",
             "\\rho ^2",
             "sen(\phi)",
-            "d\\rho d\phi d\theta",
+            "d\\rho d\phi d\\theta",
         )
 
         textoFerram_1.to_corner(UL)
@@ -197,11 +197,14 @@ class segCena(ThreeDScene):
         )
         textoFerram_4.to_corner(UL)
         self.add_fixed_in_frame_mobjects(textoFerram_4)
-
-        ponto_4 = Dot(color=WHITE)
+        
         ax_3 = ThreeDAxes()
         x_label = ax_3.get_x_axis_label(Tex("x"))
         y_label = ax_3.get_y_axis_label(Tex("y")).shift(UP * 1.8)
+
+
+        ponto_4 =Dot3D(point=ax_3.coords_to_point(0,0,0), color=WHITE)
+        self.add(ponto_4)
 
         self.set_camera_orientation(zoom=0.5)
         self.play(ReplacementTransform(ponto_4, ax_3))
@@ -302,7 +305,6 @@ class segCena(ThreeDScene):
 
         self.move_camera(phi=75 * DEGREES, theta=30 *
                          DEGREES, zoom=0.8, run_time=1.5)
-        #ang_1 = Angle(theta, theta_2)
 
         self.play(
             ReplacementTransform(ponto_6, theta),
@@ -310,9 +312,10 @@ class segCena(ThreeDScene):
             #Write(horizontal_line),
             #Write(fall_line),
         )
+
         self.play(
             Transform(theta, theta_2),
-            Create(ang_1),
+            #Create(ang),
         )
 
 
