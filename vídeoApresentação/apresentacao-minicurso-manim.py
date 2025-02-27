@@ -223,7 +223,7 @@ class segCena(ThreeDScene):
             z_range=[0, 4],
             z_length=4,
         )
-        ax_4.set_z_index(3)
+        #ax_4.set_z_index(3)
         labels_ax_4 = ax_4.get_axis_labels(Text("x"), Text("y"), Text("z"))
         # 3cilindro_1 = Cylinder(color=GREEN_D, radius=1, height=2,  show_ends=True)        graficos_4 = VGroup(ax_4, circul_4)
         # graficos_4 = VGroup(ax_4, circul_4)
@@ -288,21 +288,35 @@ class segCena(ThreeDScene):
         )
 
         ponto_5 = Dot3D(point=ax_4.coords_to_point(2,0,0), color=RED)
+        ponto_6 = Dot3D(point=ax_4.c2p(0,0,0), color=BLUE_E)
         self.play(
-            FadeIn(ponto_5),
+            FadeIn(ponto_6),
         )
 
-        main_line        = Line(ORIGIN,ax_4.c2p(4,3)+2*OUT,color=RED)
+        main_line        = Line(ORIGIN,ax_4.c2p(2,0)+2*OUT,color=RED)
+        theta = Line(ORIGIN, ax_4.c2p(0,0)+2*OUT, color=BLUE_E)
+        theta_2 = Line(ORIGIN, ax_4.c2p(2,2)+2*OUT, color=BLUE_E)
         vertical_line    = DashedLine(ax_4.c2p(4,0),ax_4.c2p(4,3))
         horizontal_line  = DashedLine(ax_4.c2p(0,3),ax_4.c2p(4,3))
         fall_line        = DashedLine(ax_4.c2p(4,3),ax_4.c2p(4,3)+OUT*2)
 
+        self.move_camera(phi=75 * DEGREES, theta=30 *
+                         DEGREES, zoom=0.8, run_time=1.5)
+        #ang_1 = Angle(theta, theta_2)
+
         self.play(
-            Write(main_line),
-            Write(vertical_line),
-            Write(horizontal_line),
-            Write(fall_line),
+            ReplacementTransform(ponto_6, theta),
+            #Write(vertical_line),
+            #Write(horizontal_line),
+            #Write(fall_line),
         )
+        self.play(
+            Transform(theta, theta_2),
+            Create(ang_1),
+        )
+
+
+
         self.wait(3)
 
 
