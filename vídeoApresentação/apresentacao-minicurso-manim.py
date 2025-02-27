@@ -224,6 +224,7 @@ class segCena(ThreeDScene):
             z_length=4,
         )
         ax_4.set_z_index(3)
+        labels_ax_4 = ax_4.get_axis_labels(Text("x"), Text("y"), Text("z"))
         # 3cilindro_1 = Cylinder(color=GREEN_D, radius=1, height=2,  show_ends=True)        graficos_4 = VGroup(ax_4, circul_4)
         # graficos_4 = VGroup(ax_4, circul_4)
         # graficos_4.scale(0.9)
@@ -231,6 +232,7 @@ class segCena(ThreeDScene):
         self.play(
             ReplacementTransform(circul_3, circul_4),
             ReplacementTransform(ax_3, ax_4),
+            Write(labels_ax_4),
         )
 
         altura_1 = 0
@@ -275,11 +277,35 @@ class segCena(ThreeDScene):
 
         self.play(altura_anim.animate.set_value(2), run_time=1.5)
 
-        # cilindro_2.remove_updater(lambda m: m.become(cilindro_2))
+        cilindro_2.remove_updater(lambda m: m.become(cilindro_2))
 
-        self.play(FadeOut(cilindro_2))
+        self.play(
+            Unwrite(cilindro_2),
+            FadeOut(circul_4),
+            #FadeOut(ax_4),
+            #run_time=1.5,
+            
+        )
 
-        self.wait(2)
+        ponto_5 = Dot3D(point=ax_4.coords_to_point(2,0,0), color=RED)
+        self.play(
+            FadeIn(ponto_5),
+        )
+
+        main_line        = Line(ORIGIN,ax_4.c2p(4,3)+2*OUT,color=RED)
+        vertical_line    = DashedLine(ax_4.c2p(4,0),ax_4.c2p(4,3))
+        horizontal_line  = DashedLine(ax_4.c2p(0,3),ax_4.c2p(4,3))
+        fall_line        = DashedLine(ax_4.c2p(4,3),ax_4.c2p(4,3)+OUT*2)
+
+        self.play(
+            Write(main_line),
+            Write(vertical_line),
+            Write(horizontal_line),
+            Write(fall_line),
+        )
+        self.wait(3)
+
+
 
         # self.play(MoveToTarget(graficos_4))
         # ----------set up de animação
