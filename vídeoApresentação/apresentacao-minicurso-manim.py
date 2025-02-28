@@ -6,25 +6,27 @@ from scipy.integrate import solve_ivp, tplquad
 class primCena(Scene):
     def construct(self):
 
-        # Cena de apresentação!
-        textoApresentação = Tex(
+#---------------------------------------------- Cena de apresentação
+        textoAprest = Tex(
             r"Olá, bem vindos ao minicurso \\ de introdução ao Manim!"
         )
+
         self.play(
-            Write(textoApresentação),
+            Write(textoAprest),
             run_time=2,
         )
         self.wait()
 
         textoPossib = Tex("Vamos ver o que essa ferramenta pode fazer")
-        self.play(Transform(textoApresentação, textoPossib))
+        
+        self.play(ReplacementTransform(textoAprest, textoPossib))
         self.wait()
 
         self.play(
-            FadeOut(textoApresentação),
+            Unwrite(textoAprest)    
         )
 
-        # Primeira cena: criação texto matemático com LateX
+#------------------------------------- cena ferramenta latex
         textoFerram_1 = Tex(
             r"1. Podemos escrever utilizando o LateX \\e dar ênfaze no texto:"
         )
@@ -35,9 +37,9 @@ class primCena(Scene):
             "sen(\phi)",
             "d\\rho d\phi d\\theta",
         )
-
         textoFerram_1.to_corner(UL)
 
+    # criação da caixa de destaque
         framebox1 = SurroundingRectangle(
             textoLatex_1[0], buff=0.1, stroke_opacity=0.5)
         framebox2 = SurroundingRectangle(
@@ -46,10 +48,12 @@ class primCena(Scene):
             textoLatex_1[2], buff=0.1, stroke_opacity=0.5)
         framebox4 = SurroundingRectangle(
             textoLatex_1[3], buff=0.1, stroke_opacity=0.5)
-        # framebox5 = SurroundingRectangle(textoLatex_1[9], buff=0.1)
+
         self.play(FadeIn(textoFerram_1), Write(textoLatex_1))
         self.play(Create(framebox1))
         self.wait()
+
+    # animação das caixas de destaque
         self.play(
             ReplacementTransform(framebox1, framebox2),
         )
@@ -65,13 +69,16 @@ class primCena(Scene):
 
         self.play(FadeOut(textoLatex_1), FadeOut(framebox4))
 
-        # Segunda cena: criação e modificação de objs geométricos
+#-------------------------cena: modificação de objs geométricos
         textoFerram_2 = Tex(
             r"2. Podemos criar e modificar elementos geométricos:")
         textoFerram_2.to_corner(UL)
+
+    # primeiro conj obje
         circul_1 = Circle(color=ORANGE, fill_opacity=1)
         triang_1 = Triangle(color=BLUE, fill_opacity=1)
         quadra_1 = Square(color=GREEN, fill_opacity=1)
+    #posição dos prim obj
         triang_1.next_to(circul_1, LEFT, buff=0.5)
         quadra_1.next_to(circul_1, RIGHT, buff=0.5)
 
@@ -83,32 +90,34 @@ class primCena(Scene):
         )
 
         self.wait()
-
+    
+    # segundo conj de obj
         circul_2 = Circle(color=YELLOW_E, fill_opacity=1)
         triang_2 = Triangle(color=RED_C, fill_opacity=1)
         quadra_2 = Square(color=BLUE_E, fill_opacity=1)
+
         circul_2.next_to(triang_2, RIGHT, buff=0.5)
         quadra_2.next_to(triang_2, LEFT, buff=0.5)
+
         self.play(
             ReplacementTransform(triang_1, quadra_2),
             ReplacementTransform(circul_1, triang_2),
             ReplacementTransform(quadra_1, circul_2),
         )
 
+        # ultima animação dos obj geométricos
         graficos_1 = VGroup(quadra_2, circul_2)
         self.play(
             graficos_1.animate.move_to(triang_2),
             ReplacementTransform(graficos_1, triang_2),
         )
 
-        # criação do plano cartesiano
-
+#---------------------------------------- criação do plano cartesiano
         textoFerram_3 = Tex(
             r"3. Podemos criar planos e \\ representar funções")
         textoFerram_3.to_corner(UL)
 
-        # --------------Primeiro plano
-
+    # primeiro plano
         ax = Axes(
             x_range=[-8, 8, 1],
             y_range=[-8, 8, 1],
@@ -117,8 +126,10 @@ class primCena(Scene):
         )
         rotulos_ax = ax.get_axis_labels(x_label="x", y_label="f(x)")
 
+        # criação ponto e linhas
         ponto_1 = Dot(ax.coords_to_point(2, 2), color=PURPLE, fill_opacity=1)
         linhas_pt1 = ax.get_lines_to_point(ax.coords_to_point(2, 2))
+
         self.play(
             ReplacementTransform(textoFerram_2, textoFerram_3),
             ReplacementTransform(triang_2, ponto_1),
@@ -131,6 +142,7 @@ class primCena(Scene):
             run_time=2,
         )
 
+    # segundo plano - atualização
         ax_2 = Axes(
             x_range=[0, 5],
             y_range=[0, 5],
@@ -143,6 +155,7 @@ class primCena(Scene):
         ponto_2 = Dot(ax_2.coords_to_point(2, 2), color=PURPLE, fill_opacity=1)
         lines_pt2 = ax_2.get_lines_to_point(ax_2.coords_to_point(2, 2))
 
+        # movimentação do bloco de obj - coordenado
         graficos_2 = VGroup(ax_2, ponto_2, lines_pt2, rotulos_ax_2)
         graficos_2.move_to(LEFT * 2 + 0.5 * DOWN).scale(1.1)
 
@@ -155,10 +168,12 @@ class primCena(Scene):
             ReplacementTransform(rotulos_ax, rotulos_ax_2),
         )
 
+        # criação e plot do gráfico x^2
         curva1_graf = ax_2.plot(lambda x: (
             x**2), color=MAROON, x_range=[0, 2.2])
         curva1_label = ax_2.get_graph_label(curva1_graf, "x^2")
         curva1_label.move_to((LEFT * 1.5) + (UP * 1.5))
+
         ponto_3 = Dot(ax_2.coords_to_point(2, 4), color=PURPLE, fill_opacity=1)
         lines_pt3 = ax_2.get_lines_to_point(ax_2.coords_to_point(2, 4))
 
@@ -170,11 +185,12 @@ class primCena(Scene):
             Unwrite(textoFerram_3),
         )
 
-        # ----------------------4 cena - r3
+#---------------------------------cena: setup gráfico e plot em R^3
         textoFerram_4 = Tex(
             r"4. Podemos criar e \\ representar funções em \\ $\mathbb{R}^3$"
         )
         textoFerram_4.to_corner(UL)
+
         ponto_4 = Dot(color=WHITE)
         graficos_3 = VGroup(
             ax_2, curva1_graf, curva1_label, ponto_3, lines_pt3, rotulos_ax_2
@@ -187,11 +203,10 @@ class primCena(Scene):
         self.wait()
 
 
-# ---add 3d axes
-
-
+#-----------------------------------cena em r3 - classe ThreeDScene
 class segCena(ThreeDScene):
     def construct(self):
+
         textoFerram_4 = Tex(
             r"4. Podemos criar e \\ representar funções em \\ $\mathbb{R}^3$"
         )
@@ -199,38 +214,31 @@ class segCena(ThreeDScene):
         self.add_fixed_in_frame_mobjects(textoFerram_4)
         
         ax_3 = ThreeDAxes()
-        x_label = ax_3.get_x_axis_label(Tex("x"))
-        y_label = ax_3.get_y_axis_label(Tex("y")).shift(UP * 1.8)
-
-
+        ax_3labels = ax_3.get_x_axis_label(Text("x"), Text("y"), Text("z"))
+        
         ponto_4 =Dot3D(point=ax_3.coords_to_point(0,0,0), color=WHITE)
         self.add(ponto_4)
 
         self.set_camera_orientation(zoom=0.5)
-        self.play(ReplacementTransform(ponto_4, ax_3))
 
-        # self.set_camera_orientation(zoom=0.5)
-        # self.play(ReplacementTransform(ponto_4, ax_3))
+        self.play(ReplacementTransform(ponto_4, ax_3), Create(ax_3labels))
+
         self.move_camera(phi=75 * DEGREES, theta=30 *
                          DEGREES, zoom=0.8, run_time=1.5)
-        # self.begin_ambient_camera_rotation(rate=0.15)
 
-        # ----------função em r3
+    # criação gráfico em r3
         circul_3 = Circle(radius=3, color=GREEN_D)
         self.play(Write(circul_3))
 
-        circul_4 = Circle(color=GREEN_D, radius=3)
         ax_4 = ThreeDAxes(
             x_range=[-4, 4],
             y_range=[-4, 4],
             z_range=[0, 4],
             z_length=4,
         )
-        #ax_4.set_z_index(3)
         labels_ax_4 = ax_4.get_axis_labels(Text("x"), Text("y"), Text("z"))
-        # 3cilindro_1 = Cylinder(color=GREEN_D, radius=1, height=2,  show_ends=True)        graficos_4 = VGroup(ax_4, circul_4)
-        # graficos_4 = VGroup(ax_4, circul_4)
-        # graficos_4.scale(0.9)
+
+        circul_4 = Circle(color=GREEN_D, radius=3)
 
         self.play(
             ReplacementTransform(circul_3, circul_4),
@@ -238,6 +246,7 @@ class segCena(ThreeDScene):
             Write(labels_ax_4),
         )
 
+    # criação e animação cilindro
         altura_1 = 0
         raio = 3
         altura_anim = ValueTracker(altura_1)
@@ -251,7 +260,7 @@ class segCena(ThreeDScene):
 
             return np.array([x, y, z])
 
-        cilindro_2 = Surface(
+        cilindro_1 = Surface(
             cilind,
             u_range=(0, 1),
             v_range=(0, 1),
@@ -260,7 +269,7 @@ class segCena(ThreeDScene):
             fill_opacity=0.5
         )
 
-        cilindro_2.add_updater(
+        cilindro_1.add_updater(
             lambda m: m.become(
                 Surface(
                     cilind,
@@ -273,23 +282,18 @@ class segCena(ThreeDScene):
             )
         )
 
-        # cilindro_2.set_fill_by_checkerboard(GREEN_D, GREEN_D, opacity=0.5)
-        # cilindro_2.scale(0.9)
-
-        self.play(Create(cilindro_2))
+        self.play(Create(cilindro_1))
 
         self.play(altura_anim.animate.set_value(2), run_time=1.5)
 
-        cilindro_2.remove_updater(lambda m: m.become(cilindro_2))
+        cilindro_1.remove_updater(lambda m: m.become(cilindro_1))
 
         self.play(
-            Unwrite(cilindro_2),
+            Unwrite(cilindro_1),
             FadeOut(circul_4),
-            #FadeOut(ax_4),
-            #run_time=1.5,
-            
-        )
+            )
 
+    # criação e plot em r3 - linhas e angulos
         ponto_5 = Dot3D(point=ax_4.coords_to_point(2,0,0), color=RED)
         ponto_6 = Dot3D(point=ax_4.c2p(0,0,0), color=BLUE_E)
         self.play(
@@ -322,11 +326,3 @@ class segCena(ThreeDScene):
 
         self.wait(3)
 
-
-
-        # self.play(MoveToTarget(graficos_4))
-        # ----------set up de animação
-        # self.begin_ambient_camera_rotation(rate=1)
-        # self.wait()
-        # self.stop_ambient_camera_rotation()
-        # self.move_camera(phi=75 * DEGREES, theta=30 * DEGRE
