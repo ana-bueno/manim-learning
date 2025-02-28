@@ -23,19 +23,19 @@ class primCena(Scene):
         self.wait()
 
         self.play(
-            Unwrite(textoAprest)    
+            Unwrite(textoPossib)    
         )
 
 #------------------------------------- cena ferramenta latex
         textoFerram_1 = Tex(
-            r"1. Podemos escrever utilizando o LateX \\e dar ênfaze no texto:"
+            r"1. Podemos escrever utilizando o LateX "
         )
         textoLatex_1 = MathTex(
-            "\int_{0}^{2\pi}\int_{0}^{\pi}\int_{0}^{1}=",
-            "(\\rho cos(\phi))^2",
+            "\\int_{0}^{2\\pi}\\int_{0}^{\\pi}\\int_{0}^{1}=",
+            "(\\rho cos(\\phi))^2",
             "\\rho ^2",
-            "sen(\phi)",
-            "d\\rho d\phi d\\theta",
+            "sen(\\phi)",
+            "d\\rho d\\phi d\\theta",
         )
         textoFerram_1.to_corner(UL)
 
@@ -214,14 +214,14 @@ class segCena(ThreeDScene):
         self.add_fixed_in_frame_mobjects(textoFerram_4)
         
         ax_3 = ThreeDAxes()
-        ax_3labels = ax_3.get_x_axis_label(Text("x"), Text("y"), Text("z"))
+        labels_ax_3 = ax_3.get_axis_labels(Text("x"), Text("y"), Text("z"))
         
         ponto_4 =Dot3D(point=ax_3.coords_to_point(0,0,0), color=WHITE)
         self.add(ponto_4)
 
         self.set_camera_orientation(zoom=0.5)
 
-        self.play(ReplacementTransform(ponto_4, ax_3), Create(ax_3labels))
+        self.play(ReplacementTransform(ponto_4, ax_3), Create(labels_ax_3))
 
         self.move_camera(phi=75 * DEGREES, theta=30 *
                          DEGREES, zoom=0.8, run_time=1.5)
@@ -243,7 +243,7 @@ class segCena(ThreeDScene):
         self.play(
             ReplacementTransform(circul_3, circul_4),
             ReplacementTransform(ax_3, ax_4),
-            Write(labels_ax_4),
+            ReplacementTransform(labels_ax_3, labels_ax_4),
         )
 
     # criação e animação cilindro
@@ -319,10 +319,7 @@ class segCena(ThreeDScene):
 
         self.play(
             Transform(theta, theta_2),
-            #Create(ang),
         )
-
-
 
         self.wait(3)
 
