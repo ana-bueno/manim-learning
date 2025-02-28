@@ -213,40 +213,32 @@ class segCena(ThreeDScene):
         textoFerram_4.to_corner(UL)
         self.add_fixed_in_frame_mobjects(textoFerram_4)
         
-        ax_3 = ThreeDAxes()
-        labels_ax_3 = ax_3.get_axis_labels(Text("x"), Text("y"), Text("z"))
-        
-        ponto_4 =Dot3D(point=ax_3.coords_to_point(0,0,0), color=WHITE)
-        self.add(ponto_4)
-
-        self.set_camera_orientation(zoom=0.5)
-
-        self.play(ReplacementTransform(ponto_4, ax_3), Create(labels_ax_3))
-
-        self.move_camera(phi=75 * DEGREES, theta=30 *
-                         DEGREES, zoom=0.8, run_time=1.5)
-
-    # criação gráfico em r3
-        circul_3 = Circle(radius=3, color=GREEN_D)
-        self.play(Write(circul_3))
-
-        ax_4 = ThreeDAxes(
+        ax_3 = ThreeDAxes(
             x_range=[-4, 4],
             y_range=[-4, 4],
             z_range=[0, 4],
             z_length=4,
         )
-        labels_ax_4 = ax_4.get_axis_labels(Text("x"), Text("y"), Text("z"))
+        labels_ax_3 = ax_3.get_axis_labels(Tex("x"), Tex("y"), Tex(""))
+                
+        ponto_4 =Dot3D(point=ax_3.coords_to_point(0,0,0), color=WHITE)
+        self.add(ponto_4)
 
-        circul_4 = Circle(color=GREEN_D, radius=3)
+        self.set_camera_orientation(zoom=0.5)
 
         self.play(
-            ReplacementTransform(circul_3, circul_4),
-            ReplacementTransform(ax_3, ax_4),
-            ReplacementTransform(labels_ax_3, labels_ax_4),
+            GrowFromCenter(ax_3), 
+            Create(labels_ax_3)
         )
 
-    # criação e animação cilindro
+        self.move_camera(phi=75 * DEGREES, theta=30 *
+                         DEGREES, zoom=0.8, run_time=1.5)
+
+    # criação gráfico em r3
+        circul_4 = Circle(color=GREEN_D, radius=3)
+        self.play(Write(circul_4))
+
+        # criação e animação cilindro
         altura_1 = 0
         raio = 3
         altura_anim = ValueTracker(altura_1)
@@ -293,33 +285,38 @@ class segCena(ThreeDScene):
             FadeOut(circul_4),
             )
 
-    # criação e plot em r3 - linhas e angulos
-        ponto_5 = Dot3D(point=ax_4.coords_to_point(2,0,0), color=RED)
-        ponto_6 = Dot3D(point=ax_4.c2p(0,0,0), color=BLUE_E)
+    # criação e plot em r3 - linhas 
+        ax_5 = ThreeDAxes()
+        ponto_5 = Dot3D()
+
         self.play(
-            FadeIn(ponto_6),
+            ReplacementTransform(ax_3, ponto_5),
+            GrowFromCenter(ax_5)
         )
 
-        main_line        = Line(ORIGIN,ax_4.c2p(2,0)+2*OUT,color=RED)
-        theta = Line(ORIGIN, ax_4.c2p(0,0)+2*OUT, color=BLUE_E)
-        theta_2 = Line(ORIGIN, ax_4.c2p(2,2)+2*OUT, color=BLUE_E)
-        vertical_line    = DashedLine(ax_4.c2p(4,0),ax_4.c2p(4,3))
-        horizontal_line  = DashedLine(ax_4.c2p(0,3),ax_4.c2p(4,3))
-        fall_line        = DashedLine(ax_4.c2p(4,3),ax_4.c2p(4,3)+OUT*2)
+        theta = Line(ORIGIN, ax_5.c2p(0,0,2), color=BLUE_E)
+        theta_2 = Line(ORIGIN, ax_5.c2p(2,2,2), color=BLUE_E)
+        vertical_line    = DashedLine(ax_5.c2p(2,0),ax_5.c2p(2,2))
+        horizontal_line  = DashedLine(ax_5.c2p(0,2),ax_5.c2p(2,2))
+        fall_line        = DashedLine(ax_5.c2p(2,2),ax_5.c2p(2,2,2))
 
-        self.move_camera(phi=75 * DEGREES, theta=30 *
-                         DEGREES, zoom=0.8, run_time=1.5)
-
+        ponto_6 = Dot3D(point=ax_5.c2p(2,2,2), color=BLUE_E)
         self.play(
-            ReplacementTransform(ponto_6, theta),
-            #Write(vertical_line),
-            #Write(horizontal_line),
-            #Write(fall_line),
+            ReplacementTransform(ponto_5, theta),
         )
 
         self.play(
             Transform(theta, theta_2),
+            GrowFromCenter(ponto_6),
+            Write(vertical_line),
+            Write(horizontal_line),
+            Write(fall_line)
         )
 
+    # criação e plot em r3 funções em r3
+        self.move_camera(phi=70 * DEGREES, theta=9 *
+                         DEGREES, run_time=1.5) 
+
         self.wait(3)
+
 
