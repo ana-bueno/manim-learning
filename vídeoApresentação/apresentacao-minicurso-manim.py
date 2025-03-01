@@ -7,6 +7,7 @@ class primCena(Scene):
     def construct(self):
 
 #---------------------------------------------- Cena de apresentação
+        self.wait(1)
         textoAprest = Tex(
             r"Olá, bem vindos ao minicurso \\ de introdução ao Manim!"
         )
@@ -28,7 +29,7 @@ class primCena(Scene):
 
 #------------------------------------- cena ferramenta latex
         textoFerram_1 = Tex(
-            r"1. Podemos escrever utilizando o LateX "
+            r"1. Podemos escrever utilizando o LaTeX "
         )
         textoLatex_1 = MathTex(
             "\\int_{0}^{2\\pi}\\int_{0}^{\\pi}\\int_{0}^{1}=",
@@ -235,9 +236,6 @@ class segCena(ThreeDScene):
                          DEGREES, zoom=0.8, run_time=1.5)
 
     # criação gráfico em r3
-        circul_4 = Circle(color=GREEN_D, radius=3)
-        self.play(Write(circul_4))
-
         # criação e animação cilindro
         altura_1 = 0
         raio = 3
@@ -280,9 +278,11 @@ class segCena(ThreeDScene):
 
         cilindro_1.remove_updater(lambda m: m.become(cilindro_1))
 
+        self.wait()
+
         self.play(
             Unwrite(cilindro_1),
-            FadeOut(circul_4),
+            run_time=2,
             )
 
     # criação e plot em r3 - linhas 
@@ -306,7 +306,7 @@ class segCena(ThreeDScene):
         )
 
         self.play(
-            Transform(theta, theta_2),
+            ReplacementTransform(theta, theta_2),
             GrowFromCenter(ponto_6),
             Write(vertical_line),
             Write(horizontal_line),
@@ -316,6 +316,33 @@ class segCena(ThreeDScene):
     # criação e plot em r3 funções em r3
         self.move_camera(phi=70 * DEGREES, theta=9 *
                          DEGREES, run_time=1.5) 
+
+        self.play(FadeOut(textoFerram_4))
+# --------------------------------------------------------------- ultima cena função e câmera
+        textoFerram_5 = Tex(r"E muito mais !")
+        textoFerram_5.to_corner(UL)
+        self.add_fixed_in_frame_mobjects(textoFerram_5)
+
+        funcao = ParametricFunction(
+            lambda t: (
+                np.sin(t),
+                np.cos(t),
+                0.1 * t
+            ),
+            t_range = (-4*PI, 4*PI, 0.01),
+            color=YELLOW_C,
+        ).set_shade_in_3d(True)
+
+        graficos_4 = VGroup(theta_2, ponto_6, vertical_line, horizontal_line, fall_line, ponto_5)
+
+        self.play(
+            FadeOut(graficos_4)
+        )
+
+        self.play(
+        Write(funcao),
+        run_time=1.5,
+        )
 
         self.wait(3)
 
