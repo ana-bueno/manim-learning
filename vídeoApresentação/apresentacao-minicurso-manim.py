@@ -188,7 +188,7 @@ class primCena(Scene):
 
 #---------------------------------cena: setup gráfico e plot em R^3
         textoFerram_4 = Tex(
-            r"4. Podemos criar e \\ representar funções em \\ $\mathbb{R}^3$"
+            r"4. Podemos criar \\ gráficos em 3D"
         )
         textoFerram_4.to_corner(UL)
 
@@ -209,7 +209,7 @@ class segCena(ThreeDScene):
     def construct(self):
 
         textoFerram_4 = Tex(
-            r"4. Podemos criar e \\ representar funções em \\ $\mathbb{R}^3$"
+            r"4. Podemos criar \\ gráficos em 3D"
         )
         textoFerram_4.to_corner(UL)
         self.add_fixed_in_frame_mobjects(textoFerram_4)
@@ -290,17 +290,17 @@ class segCena(ThreeDScene):
         ponto_5 = Dot3D()
 
         self.play(
-            ReplacementTransform(ax_3, ponto_5),
-            GrowFromCenter(ax_5)
+            ReplacementTransform(ax_3, ax_5),
+            #GrowFromCenter(ax_5)
         )
 
-        theta = Line(ORIGIN, ax_5.c2p(0,0,2), color=BLUE_E)
-        theta_2 = Line(ORIGIN, ax_5.c2p(2,2,2), color=BLUE_E)
+        theta = Line(ORIGIN, ax_5.c2p(0,0,2), color=PINK)
+        theta_2 = Line(ORIGIN, ax_5.c2p(2,2,2), color=PINK)
         vertical_line    = DashedLine(ax_5.c2p(2,0),ax_5.c2p(2,2))
         horizontal_line  = DashedLine(ax_5.c2p(0,2),ax_5.c2p(2,2))
         fall_line        = DashedLine(ax_5.c2p(2,2),ax_5.c2p(2,2,2))
 
-        ponto_6 = Dot3D(point=ax_5.c2p(2,2,2), color=BLUE_E)
+        ponto_6 = Dot3D(point=ax_5.c2p(2,2,2), color=PINK)
         self.play(
             ReplacementTransform(ponto_5, theta),
         )
@@ -334,14 +334,38 @@ class segCena(ThreeDScene):
         ).set_shade_in_3d(True)
 
         graficos_4 = VGroup(theta_2, ponto_6, vertical_line, horizontal_line, fall_line, ponto_5)
-
+        
         self.play(
             FadeOut(graficos_4)
         )
 
         self.play(
         Write(funcao),
-        run_time=1.5,
+        run_time=3,
+        )
+
+        self.move_camera(phi=75 * DEGREES, theta=30 * DEGREES, run_time=1.5)
+        self.begin_ambient_camera_rotation(rate=0.2)
+
+        self.wait(2)
+
+        graficos_5 = VGroup(textoFerram_5, funcao, ax_5, ponto_4, labels_ax_3) 
+        self.play(
+            FadeOut(graficos_5, target_position = ponto_4)
+        )
+
+        self.wait()
+
+class ultimCena(Scene):
+    def construct(self):
+        #self.add_sound("choose-motivation-281450.mp3")
+        textoFinal = Tex(
+            r"Minicurso de produção de vídeos com Manim ofertado na \\ ?? Semana da Matemática \\ UEM 2025"
+        )
+
+        self.play(
+            Write(textoFinal),
+            run_time=3,
         )
 
         self.wait(3)
