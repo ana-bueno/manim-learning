@@ -1307,7 +1307,7 @@ class oitodezCena(Scene):
     def construct(self):
         self.wait()
 
-        pontos_0 = VGroup(*[Dot(color=PINK) for s in range(0,333)])
+        pontos_0 = VGroup(*[Dot(color=PINK) for s in range(0,337)])
         pontos_0.arrange_in_grid(rows=10)
 
         self.play(Create(pontos_0), run_time=3)
@@ -1348,17 +1348,17 @@ class oitodezCena(Scene):
         self.wait(4)
         self.play(Write(conta_3))
 
-        pontos_3 = VGroup(*[Dot(color=WHITE) for s in range(0,333)])
+        pontos_3 = VGroup(*[Dot(color=WHITE) for s in range(0,337)])
         pontos_3.arrange_in_grid(rows=17).move_to(RIGHT*3)
         pontos_3[328:333].set_fill(PINK)
 
-        conta_4 = MathTex(r"330 + 3 = 40 \cdot 8 + 10 + 3")
+        conta_4 = MathTex(r"330 + 7 = 40 \cdot 8 + 10 + 7")
 
         conta_4.next_to(conta_3, DOWN, buff=.5)
 
-        conta_5 = MathTex(r"333 = 8 \cdot (40 + 1) + 5")
+        conta_5 = MathTex(r"337 = 8 \cdot (40 + 2) + 1")
         conta_5.next_to(conta_4, DOWN, buff=.5)
-        conta_6 = MathTex(r"333 = 8 \cdot 41 + 5")
+        conta_6 = MathTex(r"337 = 8 \cdot 42 + 1")
         conta_6.next_to(conta_5, DOWN, buff=.5)
 
         self.play(Write(conta_4))
